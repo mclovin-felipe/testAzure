@@ -1,8 +1,13 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import AzureADProvider from "next-auth/providers/azure-ad";
+import GoogleProvider from "next-auth/providers/google";
 export const options = {
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET
+    }),
     AzureADProvider({
       clientId: process.env.NEXT_PUBLIC_AZURE_AD_CLIENT_ID,
       clientSecret: process.env.NEXT_PUBLIC_AZURE_AD_CLIENT_SECRET,
@@ -10,6 +15,7 @@ export const options = {
     }),
   ],
   callbacks: {
+<<<<<<< HEAD
     async signIn(user, account, profile) {
       console.log("Sign In:", user, account, profile);
       return true;
@@ -19,9 +25,15 @@ export const options = {
       // IMPORTANT: Persist the access_token to the token right after sign in
       if (account) {
         token.accessToken = account.access_token
+=======
+    async signIn({ account, profile }) {
+      if (account.provider === "google") {
+        return profile.email_verified && profile.email.endsWith("@falp.org")
+>>>>>>> 14c1c235ba0e03ffb3f8a0e3a221c620d29ed97e
       }
-      return token;
+      return true // Do different verification for other providers that don't have `email_verified`
     },
+<<<<<<< HEAD
     async redirect(url, baseUrl) {
       console.log("Redirect:", url, baseUrl);
       return baseUrl;
@@ -31,4 +43,7 @@ export const options = {
       return session;
     },
   },
+=======
+  }
+>>>>>>> 14c1c235ba0e03ffb3f8a0e3a221c620d29ed97e
 };
