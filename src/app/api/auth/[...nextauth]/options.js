@@ -22,10 +22,6 @@ export const options = {
       }
       return token;
     },
-    async signIn(user, account, profile) {
-      console.log("Sign In:", user, account, profile);
-      return true; // Permitir el inicio de sesión
-    },
     async redirect(url, baseUrl) {
       console.log("Redirect:", url, baseUrl);
       return baseUrl;
