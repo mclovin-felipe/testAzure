@@ -12,11 +12,24 @@ export const options = {
   ],
   callbacks: {
     async jwt({ token, account }) {
+      console.log("JWT:", token, account);
       // IMPORTANT: Persist the access_token to the token right after sign in
       if (account) {
         token.accessToken = account.access_token
       }
       return token;
+    },
+    async signIn(user, account, profile) {
+      console.log("Sign In:", user, account, profile);
+      return true; // Permitir el inicio de sesión
+    },
+    async redirect(url, baseUrl) {
+      console.log("Redirect:", url, baseUrl);
+      return baseUrl;
+    },
+    async session(session, user) {
+      console.log("Session:", session, user);
+      return session;
     },
   },
 };
