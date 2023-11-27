@@ -1,5 +1,5 @@
-
-
+"use client"
+import { SessionProvider } from "next-auth/react";
 export const metadata = {
   title: 'Portal Notificaciones',
   description: 'Creado para facilitar el envió de notificaciones',
@@ -8,7 +8,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <SessionProvider>{children}</SessionProvider>
     </html>
   )
 }
