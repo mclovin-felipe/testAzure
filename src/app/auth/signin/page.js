@@ -20,7 +20,7 @@ const Page = () => {
                 >
                     <Fade in={true} timeout={1300}>
 
-                        <Image src={require("../../../assets/logo-falp.gif")} height={"100%"} width={"100%"} />
+                        {/* <Image src={require("../../../assets/logo-falp.gif")} height={"100%"} width={"100%"} /> */}
                     </Fade>
                     <ButtonSing />
 
