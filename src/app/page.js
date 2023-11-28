@@ -9,6 +9,7 @@ export default function HomePage() {
   const { data, session } = useSession();
   const [open, setOpen] = useState(false);
   if (data && data.user) {
+    console.log(data)
     return (
       <main>
         <Home></Home>
