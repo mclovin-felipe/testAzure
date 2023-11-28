@@ -5,7 +5,7 @@ import Image from "next/image";
 import Collapse from '@mui/material/Collapse';
 import { useState } from "react";
 import Home from '@/app/pages/home/page'
-export default function Home() {
+export default function HomePage() {
   const { data, session } = useSession();
   const [open, setOpen] = useState(false);
   if (data && data.user) {
