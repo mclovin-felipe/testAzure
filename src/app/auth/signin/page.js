@@ -5,7 +5,7 @@ import Image from "next/image";
 import ButtonSing from "./button";
 import falp from '../../../assets/logo-falp.gif'
 import { useSession, signOut, signIn } from "next-auth/react";
-import Home from '@/app/pages/home/page'
+import Home from '@/app/page'
 import { useState } from "react";
 
 const Page = () => {
