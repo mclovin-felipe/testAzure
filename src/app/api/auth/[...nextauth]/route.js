@@ -9,9 +9,9 @@ const authOptions = {
           tenantId: process.env.NEXT_PUBLIC_AZURE_AD_TENANT_ID,
         }),
     ],
-    // pages: {
-    //   signIn: '/auth/signin',
-    // },
+    pages: {
+      signIn: '/auth/signin',
+    },
     callbacks: {
         async jwt({ token, account }) {
           // IMPORTANT: Persist the access_token to the token right after sign in
@@ -21,7 +21,8 @@ const authOptions = {
           return token;
         },
       },
+      
 }
 
 const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
+export { handler as GET, handler as POST, };

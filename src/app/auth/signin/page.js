@@ -1,13 +1,14 @@
 
-import { Box, Button, Fade, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { useSession, signOut, signIn, getProviders } from "next-auth/react";
 import Image from "next/image";
 import ButtonSing from "./button";
+import falp from '../../../assets/logo-falp.gif'
 const Page = () => {
 
     return (
         <Box
-            height={"91.8vh"}
+            height={"100vh"}
             width={"100%"}
             display={"flex"}
             justifyContent={"center"}
@@ -16,13 +17,17 @@ const Page = () => {
 
         >
             <Stack boxShadow={12} direction={'row'} height={"35vh"} >
-                <Box flexDirection={'column'} borderRadius={3} width={400} bgcolor={'white'} height={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}
-                >
-                    <Fade in={true} timeout={1300}>
-
-                        <Image src={require("../../../assets/logo-falp.gif")} height={"100%"} width={"100%"} />
-                    </Fade>
-                    <ButtonSing />
+                <Box flexDirection={'column'}
+                borderRadius={3} 
+                width={400} 
+                bgcolor={'white'}
+                height={"100%"}
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}> 
+                <Image src={falp} sizes="100vw"
+                style={{ width: '100%', height: 'auto' }}/>
+                <ButtonSing />
 
                 </Box>
 
