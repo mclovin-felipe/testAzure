@@ -9,9 +9,9 @@ const authOptions = {
       tenantId: process.env.NEXT_PUBLIC_AZURE_AD_TENANT_ID,
     }),
   ],
-  pages: {
-    signIn: '/auth/signin',
-  },
+  // pages: {
+  //   signIn: '/auth/signin',
+  // },
   session: {
     strategy: "jwt",
   },
