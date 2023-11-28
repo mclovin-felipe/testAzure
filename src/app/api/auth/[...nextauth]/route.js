@@ -9,6 +9,9 @@ const authOptions = {
           tenantId: process.env.NEXT_PUBLIC_AZURE_AD_TENANT_ID,
         }),
     ],
+    pages: {
+      signIn: '/auth/signin',
+    },
     callbacks: {
         async jwt({ token, account }) {
           // IMPORTANT: Persist the access_token to the token right after sign in
