@@ -1,12 +1,24 @@
 
 'use client'
 import { Box, Stack, Typography } from "@mui/material";
-import { useSession, signOut, signIn, getProviders } from "next-auth/react";
 import Image from "next/image";
 import ButtonSing from "./button";
 import falp from '../../../assets/logo-falp.gif'
+import { useSession, signOut, signIn } from "next-auth/react";
+import Home from '@/app/pages/home/page'
+import { useState } from "react";
 
 const Page = () => {
+    const { data, session } = useSession();
+    const [open, setOpen] = useState(false);
+    if (data && data.user) {
+        console.log(data)
+        return (
+          <main>
+            <Home></Home>
+          </main>
+        )
+      }else{
     return (
         <Box
             height={"100vh"}
@@ -36,5 +48,6 @@ const Page = () => {
             </Stack>
 
         </Box>)
+      }
 }
 export default Page;
