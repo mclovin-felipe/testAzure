@@ -4,13 +4,19 @@ import { useSession, signOut, signIn, getProviders } from "next-auth/react";
 import Image from "next/image";
 import ButtonSing from "./button";
 import falp from '../../../assets/logo-falp.gif'
+import { useRouter } from "next/router";
 const Page = () => {
-    const Providers = async () => {
-        const data = await getProviders();
-        console.log(data)
-
-    }
-    Providers()
+    const router = useRouter()
+    const {status} = useSession()
+    useEffect(() => {
+        if (status === "unauthenticated") {
+          console.log("No JWT");
+          console.log(status);
+          void signIn("okta");
+        } else if (status === "authenticated") {
+          void router.push("/pages/home");
+        }
+      }, [status]);
 
     return (
         <Box
