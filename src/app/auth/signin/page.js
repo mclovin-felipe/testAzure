@@ -5,15 +5,11 @@ import Image from "next/image";
 import ButtonSing from "./button";
 import falp from '../../../assets/logo-falp.gif'
 import { useSession, signOut, signIn } from "next-auth/react";
-import Home from '@/app/page'
-import { useState } from "react";
 import { redirect } from 'next/navigation'
 
 const Page = () => {
     const { data, session } = useSession();
-    const [open, setOpen] = useState(false);
     if (data && data.user) {
-        console.log(data)
         redirect('/')
       }else{
     return (
