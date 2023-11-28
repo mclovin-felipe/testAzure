@@ -1,10 +1,12 @@
 
+'use client'
 import { Box, Stack, Typography } from "@mui/material";
 import { useSession, signOut, signIn, getProviders } from "next-auth/react";
 import Image from "next/image";
 import ButtonSing from "./button";
 import falp from '../../../assets/logo-falp.gif'
-import { useRouter } from "next/router";
+import { useRouter } from 'next/navigation'
+import { useEffect } from "react";
 const Page = () => {
     const router = useRouter()
     const {status} = useSession()
@@ -14,7 +16,7 @@ const Page = () => {
           console.log(status);
           void signIn("okta");
         } else if (status === "authenticated") {
-          void router.push("/pages/home");
+            router.push('/pages/home')
         }
       }, [status]);
 
