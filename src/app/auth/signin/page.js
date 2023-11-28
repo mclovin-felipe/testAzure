@@ -5,6 +5,12 @@ import Image from "next/image";
 import ButtonSing from "./button";
 import falp from '../../../assets/logo-falp.gif'
 const Page = () => {
+    const Providers = async () => {
+        const data = await getProviders();
+        console.log(data)
+
+    }
+    Providers()
 
     return (
         <Box
@@ -18,16 +24,16 @@ const Page = () => {
         >
             <Stack boxShadow={12} direction={'row'} height={"35vh"} >
                 <Box flexDirection={'column'}
-                borderRadius={3} 
-                width={400} 
-                bgcolor={'white'}
-                height={"100%"}
-                display={"flex"}
-                justifyContent={"center"}
-                alignItems={"center"}> 
-                <Image src={falp} sizes="100vw"
-                style={{ width: '100%', height: 'auto' }}/>
-                <ButtonSing />
+                    borderRadius={3}
+                    width={400}
+                    bgcolor={'white'}
+                    height={"100%"}
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}>
+                    <Image src={falp} sizes="100vw"
+                        style={{ width: '100%', height: 'auto' }} />
+                    <ButtonSing />
 
                 </Box>
 

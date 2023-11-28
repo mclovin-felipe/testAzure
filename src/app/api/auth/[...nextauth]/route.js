@@ -9,15 +9,13 @@ const authOptions = {
       tenantId: process.env.NEXT_PUBLIC_AZURE_AD_TENANT_ID,
     }),
   ],
-  callbacks: {
-    async jwt({ token, account }) {
-      // IMPORTANT: Persist the access_token to the token right after sign in
-      if (account) {
-        token.idToken = account.id_token;
-      }
-      return token;
-    },
+  pages: {
+    signIn: '/auth/signin',
   },
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
 
 }
 
