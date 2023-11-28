@@ -1,3 +1,8 @@
 body {
-  margin: 0 !important;
+  margin: 0;
+  /* Anula el margen predeterminado del cuerpo */
+  padding: 0;
+  /* Anula el relleno predeterminado del cuerpo (opcional) */
+  box-sizing: border-box;
+  /* Asegura que el ancho y el alto incluyen el relleno y el borde */
 }

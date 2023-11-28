@@ -1,6 +1,6 @@
 
 'use client'
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, Fade } from "@mui/material";
 import Image from "next/image";
 import ButtonSing from "./button";
 import falp from '../../../assets/logo-falp.gif'
@@ -38,9 +38,11 @@ const Page = () => {
                     display={"flex"}
                     justifyContent={"center"}
                     alignItems={"center"}>
-                    <Image src={falp} sizes="100vw"
-                        style={{ width: '100%', height: 'auto' }} />
+                    <Fade in={true} timeout={1300}>
+                    <Image src={falp} alt="Logo de Falp" sizes="100vw" style={{ width: '100%', height: 'auto' }} priority/>
+                    </Fade>
                     <ButtonSing />
+                    
 
                 </Box>
 
