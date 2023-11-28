@@ -5,21 +5,8 @@ import { useSession, signOut, signIn, getProviders } from "next-auth/react";
 import Image from "next/image";
 import ButtonSing from "./button";
 import falp from '../../../assets/logo-falp.gif'
-import { useRouter } from 'next/navigation'
-import { useEffect } from "react";
-const Page = () => {
-    const router = useRouter()
-    const {status} = useSession()
-    useEffect(() => {
-        if (status === "unauthenticated") {
-          console.log("No JWT");
-          console.log(status);
-          void signIn("okta");
-        } else if (status === "authenticated") {
-            router.push('/pages/home')
-        }
-      }, [status]);
 
+const Page = () => {
     return (
         <Box
             height={"100vh"}
