@@ -15,8 +15,10 @@ const Home = () => {
 
   ];
 
+
     const [selectedOption, setSelectedOption] = useState(null);
     const renderContent = () => {
+
         switch (selectedOption) {
           case 1:
             return (
@@ -28,16 +30,18 @@ const Home = () => {
               </Container>
               )
           case 2:
-            return <div>hola2</div>;
+            return (
+              <div>Hola3</div>
+              )
         case "0_0":
             return (
             <Container sx={{display:"flex", flexDirection:"column", alignItems:"center", alignContent:"center"}}>
               <Typography variant="h4" gutterBottom>
-                Enviar notificación a todos los dispositivos
+                  Enviar notificación a todos los dispositivos
               </Typography>
               <Formulario campos={camposPorTopico} selectedOption={selectedOption}/>
           </Container>
-          );
+          )
           default:
             return (
               <Container sx={{display:"flex", flexDirection:"column", alignItems:"center", alignContent:"center"}}>

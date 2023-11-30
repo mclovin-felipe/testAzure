@@ -28,7 +28,14 @@ const Home = () => {
               </Container>
               )
           case 2:
-            return <div>hola2</div>;
+            return (
+              <Container sx={{display:"flex", flexDirection:"column", alignItems:"center", alignContent:"center"}}>
+              <Typography variant="h4" gutterBottom>
+                Programar Notificación
+              </Typography>
+              <Formulario campos={camposPorTopico} selectedOption={selectedOption}/>
+          </Container>
+              )
         case "0_0":
             return (
             <Container sx={{display:"flex", flexDirection:"column", alignItems:"center", alignContent:"center"}}>

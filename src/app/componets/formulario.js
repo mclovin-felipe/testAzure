@@ -1,10 +1,43 @@
 // components/Formulario.js
 import React,{useState,useEffect} from 'react';
 import { useForm } from 'react-hook-form';
-import { Autocomplete, TextField,Divider, Typography, Button, Box, CircularProgress, Backdrop } from '@mui/material';
+import { Autocomplete, TextField,Divider, Typography, Button, Box, CircularProgress, Backdrop, Stack} from '@mui/material';
 import Modal from './modal';
 import {enviarInfoImportante,enviarUltimaNoticia, insertarNotificacion} from '../services/api'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone'; 
+
 const Formulario = ({ campos,selectedOption }) => {
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+  dayjs.tz.setDefault('America/Santiago');
+  const today = new Date();
+  const fechaEnvio = dayjs().format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+  const defaultTime = dayjs(today).set('hour', 8).set('minute', 0);
+const shouldDisableTime = (value, view) => {
+  const currentDateTime = dayjs();
+ // Si la fecha seleccionada es la misma que la fecha actual y la hora ya ha pasado
+  if (selectedDate.isSame(currentDateTime, 'day') && selectedDate.hour() < currentDateTime.hour()) {
+    return true;
+  }
+
+  // Si la fecha seleccionada es antes de la fecha actual, deshabilitar todas las horas
+  if (selectedDate.isBefore(currentDateTime, 'day')) {
+    return true;
+  }
+
+  // Si la hora seleccionada está fuera del rango de trabajo (8 am a 6 pm)
+  if (view === 'hours') {
+    return selectedDate.hour() <8 || selectedDate.hour() >= 19;
+  }
+
+  return false;
+};
+
     const {
         register,
         handleSubmit,
@@ -13,7 +46,7 @@ const Formulario = ({ campos,selectedOption }) => {
         setValue,
         setError,
         reset,
-        formState: { errors },
+        formState: { errors, isValid},
       } = useForm({
         defaultValues: {
           titulo:"",
@@ -37,6 +70,7 @@ const Formulario = ({ campos,selectedOption }) => {
               };
             const dataToInsert ={
               topico:selectedTopic?.label,
+              fechaEnvio:fechaEnvio,
               usuarioCrea:"manualTest",
               titulo:data.titulo,
               descripcion:data.mensaje,
@@ -88,6 +122,30 @@ const Formulario = ({ campos,selectedOption }) => {
       } catch (error) {
         console.error('Error inesperado:', error);
       }
+    }else if(selectedOption == 2 && selectedTopic.id ==1){
+      try {
+        console.log(selectedDate)
+        const dataToInsert ={
+          topico:selectedTopic?.label,
+          fechaEnvio:selectedDate.format(),
+          usuarioCrea:"manualTest",
+          titulo:data.titulo,
+          descripcion:data.mensaje,
+          estado:0
+        }
+        setIsLoading(true)
+        reset();
+        const response = await insertarNotificacion(dataToInsert)
+        if(response.data.result == "NOTIFICACION INGRESADA"){
+          setBackdrop(false)
+          console.log(response.data)
+        }
+
+      } catch (error) {
+        console.error('Error inesperado:', error);
+      }
+    }else if(selectedOption == 2 && selectedTopic.id == 2){
+
     }
   };
 
@@ -101,6 +159,20 @@ const Formulario = ({ campos,selectedOption }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [backdrop, setBackdrop] = useState(true)
   const [response,setResponse] = useState(null)
+  const [selectedDate, setSelectedDate] = useState(defaultTime);
+  const validateDateTime = (value) => {
+    const selectedDateTime = selectedDate;
+    const currentDateTime = dayjs();
+  
+    // Validación personalizada: No permitir fechas y horas en el pasado
+    if (selectedDateTime.isBefore(currentDateTime)) {
+      return 'No se puede seleccionar una fecha y hora pasada';
+    }
+  
+    // Otras validaciones personalizadas aquí si es necesario
+  
+    return true; // Retorna true si la validación pasa
+  };
 
   const toggleCamposOpcionales = () => {
     setMostrarCamposOpcionales(!mostrarCamposOpcionales);
@@ -171,7 +243,7 @@ const Formulario = ({ campos,selectedOption }) => {
             response != null && <Modal response={response} onOkClick={handleOkClick}/>}
       {selectedTopic.id==1 ? renderCamposRequeridos():null}
       <Typography mb={1}> Tópico</Typography>
-      { selectedOption == "0_0" && 
+      { (selectedOption == "0_0" || selectedOption == 2) && 
       <Autocomplete
       disablePortal
       disableClearable
@@ -182,13 +254,37 @@ const Formulario = ({ campos,selectedOption }) => {
       sx={{ width: "100%" }}
       renderInput={(params) => <TextField {...params} label="" />}
       />}
+      {selectedOption == 2 &&
+      <Box>
+      <Typography mb={1} mt={2}> Fecha y hora de envío</Typography>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Stack spacing={2} sx={{ minWidth: 305 }}>
+        <DateTimePicker
+        {...register('selectedDate', {
+          required: true,
+          validate: validateDateTime
+        })}
+        shouldDisableTime={shouldDisableTime}
+        skipDisabled
+        value={selectedDate}
+        format="DD-MM-YYYY HH:mm"
+        minDate={dayjs(today)}
+        minutesStep={60}
+        onChange={setSelectedDate}
+        ampm={false}
+        minTime={dayjs('2022-04-17T08:00')}
+        maxTime={dayjs('2022-04-17T18:30')}
+        />
+      </Stack>
+    </LocalizationProvider>
+    </Box>     }
       {selectedTopic.id==1  ? <Divider sx={{padding:"5px"}}><Button variant="text" color="primary" onClick={toggleCamposOpcionales}>
         {mostrarCamposOpcionales ? 'Ocultar Campos Opcionales' : 'Mostrar Campos Opcionales'}
       </Button>
       </Divider>: null}
       {renderCamposOpcionales()}
-      <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)} sx={{marginTop:"1rem"}}>
-        Enviar
+      <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)} disabled={!isValid} sx={{marginTop:"1rem"}}>
+        {selectedOption == 2 ? "Programar" : "Enviar"}
       </Button>
     </Box>
 

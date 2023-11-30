@@ -10,7 +10,7 @@ const MenuItem = ({ text, subMenuItems, handleMenuClick }) => {
       setOpenItem(!openItem);
       // Llama a la función con el índice del elemento principal
     }
-    handleMenuClick(text[1]); 
+    handleMenuClick(text[1]);
   };
 
   const handleSubMenuClick = (index) => {
