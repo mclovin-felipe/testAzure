@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone'; 
+import { isValid } from 'date-fns';
 
 const Formulario = ({ campos,selectedOption }) => {
   dayjs.extend(utc);
@@ -46,13 +47,13 @@ const shouldDisableTime = (value, view) => {
         setValue,
         setError,
         reset,
-        formState: { errors, isValid},
+        formState: { errors},
       } = useForm({
         defaultValues: {
           titulo:"",
           mensaje:"",
           imageUrl:"",
-          json:""
+          json:"",
         },
        
       });
@@ -124,7 +125,6 @@ const shouldDisableTime = (value, view) => {
       }
     }else if(selectedOption == 2 && selectedTopic.id ==1){
       try {
-        console.log(selectedDate)
         const dataToInsert ={
           topico:selectedTopic?.label,
           fechaEnvio:selectedDate.format(),
@@ -136,9 +136,11 @@ const shouldDisableTime = (value, view) => {
         setIsLoading(true)
         reset();
         const response = await insertarNotificacion(dataToInsert)
-        if(response.data.result == "NOTIFICACION INGRESADA"){
+        if(response){
+          setResponse(response.data)
+        }
+        if(response.data.result){
           setBackdrop(false)
-          console.log(response.data)
         }
 
       } catch (error) {
@@ -166,22 +168,18 @@ const shouldDisableTime = (value, view) => {
   
     // Validación personalizada: No permitir fechas y horas en el pasado
     if (selectedDateTime.isBefore(currentDateTime)) {
-      return 'No se puede seleccionar una fecha y hora pasada';
+      return false;
     }
-  
-    // Otras validaciones personalizadas aquí si es necesario
-  
     return true; // Retorna true si la validación pasa
   };
-
   const toggleCamposOpcionales = () => {
     setMostrarCamposOpcionales(!mostrarCamposOpcionales);
   };
 
   const ValidacionesGLobales = {
     required: true,
-    maxLength: 60,
-    minLength: 1,
+    maxLength:100,
+    minLength: 10,
   };
 
   const renderCamposRequeridos = () => {
@@ -229,6 +227,8 @@ const shouldDisableTime = (value, view) => {
     setBackdrop(false)
   };
 
+const disableButtonProgramar = watch("titulo")=="" || watch("mensaje")=="" || !validateDateTime(selectedDate)
+const disableButtonEnviar= watch("titulo")=="" || watch("mensaje")==""
   return (
     
     <Box width={'40%'} height={'80vh'} mt={2}>
@@ -283,9 +283,15 @@ const shouldDisableTime = (value, view) => {
       </Button>
       </Divider>: null}
       {renderCamposOpcionales()}
-      <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)} disabled={!isValid} sx={{marginTop:"1rem"}}>
-        {selectedOption == 2 ? "Programar" : "Enviar"}
-      </Button>
+      {selectedOption == "0_0" ? 
+      <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)} disabled={disableButtonEnviar} sx={{marginTop:"1rem"}}>
+        Enviar
+      </Button> : 
+      <Button variant="contained" color="primary" onClick={handleSubmit(onSubmit)} disabled={disableButtonProgramar} sx={{marginTop:"1rem"}}>
+        Programar
+      </Button>     
+}
+
     </Box>
 
   );
