@@ -11,9 +11,31 @@ const HistorialNotificaciones =() =>{
   const [data, setData] = useState([]);
   const fetchData = async () => {
     try {
-      const response = await obtenerNotificacion(1);
-      if (response && response.status === 200) {
-        setData(response.data.result); // Ajusta según la estructura de tu respuesta
+      // Obtener notificaciones de estado 0
+      const response1 = await obtenerNotificacion(0);
+      // Obtener notificaciones de estado 1
+      const response2 = await obtenerNotificacion(1);
+      // Obtener notificaciones de estado 2
+      const response3 = await obtenerNotificacion(2);
+      // Inicializar allNotifications como un array vacío
+      let allNotifications = [];
+      console.log(response3.data.result)
+
+      if (response1 && response1.status === 200 && response1.data.result!="No hay registros") {
+        allNotifications = [...allNotifications, ...response1.data.result];
+      }
+
+      if (response2 && response2.status === 200 && response2.data.result!="No hay registros") {
+        allNotifications = [...allNotifications, ...response2.data.result];
+      }
+
+      if (response3 && response3.status === 200 && response3.data.result!="No hay registros") {
+        allNotifications = [...allNotifications, ...response3.data.result];
+      }
+
+      // Actualizar el estado solo si hay datos en allNotifications
+      if (allNotifications.length > 0) {
+        setData(allNotifications);
       }
     } catch (error) {
       console.error('Error al obtener datos:', error);
@@ -26,7 +48,7 @@ const HistorialNotificaciones =() =>{
 
   const formatDate = (dateString) => format(new Date(dateString), 'dd-MM-yyyy');
   const formatTime = (dateString) => format(new Date(dateString), 'HH:mm:ss');
-  const formatState = (dateString) => dateString == 1 ? "Enviado" : "Enviado";
+  const formatState = (dateString) => dateString == 1 ? "Enviado" : dateString == 0 ? "Pendiente" : "No Enviada";
     const columns = [
         { field: 'CORRELATIVO', headerName: 'ID', width: 10 },
         {field:'TITULO', headerName: 'TITULO', width: 130},
